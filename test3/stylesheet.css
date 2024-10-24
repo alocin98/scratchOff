@@ -1,0 +1,32 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: white; /* White background */
+    overflow: hidden;
+    position: relative; /* To position the canvas correctly */
+}
+#revealSection {
+    position: relative;
+    color: black; /* Black text color */
+    font-size: 8rem; /* Adjust text size */
+    z-index: 1; /* Ensure text is above the canvas */
+    display: flex; /* Center the text */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100%; /* Full height */
+    width: 100%; /* Full width */
+}
+#scratchCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto; /* Ensure mouse events work on canvas */
+    z-index: 2; /* Canvas above the text */
+}
+#scratchCanvas p{
+    font-size: 100vw;
+}
+
