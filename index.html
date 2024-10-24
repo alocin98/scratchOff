@@ -1,94 +1,94 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Scratch-Off Effect</title>
-  <link rel="stylesheet" href="stylesheet.css">
-</head>
-<body>
-<section id="revealSection">
-  <p>YOU SUCK!</p>
-</section>
-<canvas id="scratchCanvas"></canvas>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scratch-Off Effect</title>
+    <link rel="stylesheet" href="stylesheet.css" />
+  </head>
+  <body>
+    <section id="revealSection">
+      <p>YOU SUCK!</p>
+    </section>
+    <canvas id="scratchCanvas"></canvas>
 
-<script>
-  const canvas = document.getElementById('scratchCanvas');
-  const ctx = canvas.getContext('2d');
-  const revealSection = document.getElementById('revealSection');
+    <script>
+      const canvas = document.getElementById("scratchCanvas");
+      const ctx = canvas.getContext("2d");
+      const revealSection = document.getElementById("revealSection");
 
-  // Set canvas dimensions
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+      // Set canvas dimensions
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
 
-  // Fill canvas with black color
-  ctx.fillStyle = 'black';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Fill canvas with black color
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Variables to track mouse position
-  let isScratching = false;
+      // Variables to track mouse position
+      let isScratching = false;
 
-  // Function to scratch off the black color
-  function scratch(x, y) {
-    ctx.globalCompositeOperation = 'destination-out'; // Make the area transparent
-    ctx.beginPath();
-    ctx.arc(x, y, 30, 0, Math.PI * 2, true); // Draw a circle
-    ctx.fill();
-    ctx.closePath();
-    checkReveal(); // Check if the section should be revealed
-  }
-
-  // Function to check if the section should be revealed
-  function checkReveal() {
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    let transparentCount = 0;
-
-    for (let i = 0; i < imageData.data.length; i += 4) {
-      // Check the alpha value (transparency)
-      if (imageData.data[i + 3] === 0) {
-        transparentCount++;
+      // Function to scratch off the black color
+      function scratch(x, y) {
+        ctx.globalCompositeOperation = "destination-out"; // Make the area transparent
+        ctx.beginPath();
+        ctx.arc(x, y, 30, 0, Math.PI * 2, true); // Draw a circle
+        ctx.fill();
+        ctx.closePath();
+        checkReveal(); // Check if the section should be revealed
       }
-    }
 
-    // If more than 20% of the canvas is transparent, reveal the section
-    if (transparentCount > (canvas.width * canvas.height) * 0.2) {
-      revealSection.style.display = 'flex'; // Show the section
-    }
-  }
+      // Function to check if the section should be revealed
+      function checkReveal() {
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        let transparentCount = 0;
 
-  // Mouse down event
-  canvas.addEventListener('mousedown', (e) => {
-    isScratching = true;
-    scratch(e.clientX, e.clientY);
-  });
+        for (let i = 0; i < imageData.data.length; i += 4) {
+          // Check the alpha value (transparency)
+          if (imageData.data[i + 3] === 0) {
+            transparentCount++;
+          }
+        }
 
-  // Mouse move event
-  canvas.addEventListener('mousemove', (e) => {
-    if (isScratching) {
-      scratch(e.clientX, e.clientY);
-    }
-  });
+        // If more than 20% of the canvas is transparent, reveal the section
+        if (transparentCount > canvas.width * canvas.height * 0.2) {
+          revealSection.style.display = "flex"; // Show the section
+        }
+      }
 
-  // Mouse up event
-  canvas.addEventListener('mouseup', () => {
-    isScratching = false;
-  });
+      ["mousedown", "touchstart"].forEach((event) => {
+        canvas.addEventListener(event, (e) => {
+          isScratching = true;
+          scratch(e.clientX, e.clientY);
+        });
+      });
 
-  // Prevent context menu on right-click
-  canvas.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-  });
+      ["mousemove", "touchmove"].forEach((event) => {
+        canvas.addEventListener(event, (e) => {
+          if (isScratching) {
+            scratch(e.clientX, e.clientY);
+          }
+        });
+      });
 
-  // Resize canvas on window resize
-  window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  });
-</script>
-</body>
+      ["touchend", "mouseup"].forEach((event) => {
+        canvas.addEventListener(event, (e) => {
+          isScratching = false;
+        });
+      });
+
+      // Prevent context menu on right-click
+      canvas.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+      });
+
+      // Resize canvas on window resize
+      window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      });
+    </script>
+  </body>
 </html>
-
-
-
